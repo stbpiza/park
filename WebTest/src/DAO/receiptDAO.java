@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import DTO.gateDTO;
 
 public class receiptDAO {
 	private Connection getConnection() throws SQLException {
@@ -37,7 +36,7 @@ public class receiptDAO {
 
             pstmt.setString(1, recDto.getPay_price());
             pstmt.setString(2, recDto.getRegular_non());
-            pstmt.setString(3, recDto.getGate_id());
+            pstmt.setInt(3, Integer.parseInt(recDto.getGate_id()));
             int count = pstmt.executeUpdate();
 
             result = (count == 1);

@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class gateIdDAO {
+public class RegularDAO {
 	private Connection getConnection() throws SQLException {
         Connection conn = null;
 
@@ -22,9 +22,8 @@ public class gateIdDAO {
 
         return conn;
     }
-	
-	public String getId(String car_num) {
-		String gate_id = null;
+	public String getTime(DTO.regularDTO regDto) {
+		String time = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -32,25 +31,25 @@ public class gateIdDAO {
 		try {
 			conn = getConnection();
 			
-			String sql = "SELECT time FROM gate WHERE car_num = ? AND in_out = 0 ORDER BY time DESC LIMIT 1";
+			String sql = "SELECT end_time FROM regular WHERE car_num = ? ORDER BY end_time DESC LIMIT 1";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, car_num);
+			pstmt.setString(1, regDto.getCar_num());
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				DTO.gateDTO gateDto = new DTO.gateDTO();
-				gateDto.setGate_id(rs.getString(1));
+				//DTO.regularDTO regDto = new DTO.regularDTO();
+				regDto.setEnd_time(rs.getString(1));
 				
-				gate_id = gateDto.getGate_id();
+				time = regDto.getEnd_time();
 			}
-			
 		}
 		catch (SQLException e){
 			e.printStackTrace();
 			
 		}
 		
-		return gate_id;
+		return time;
 	}
+	
 }

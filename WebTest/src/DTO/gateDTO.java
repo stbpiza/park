@@ -12,12 +12,14 @@ public class gateDTO {
 	}
 	public void setGate_id(String gate_id) {
 		this.gate_id = gate_id;
+		//System.out.println("gate_id"+ gate_id);
 	}
 	public String getCar_num() {
 		return car_num;
 	}
 	public void setCar_num(String car_num) {
 		this.car_num = car_num;
+		//System.out.println("car_num"+car_num);
 	}
 	public String getTime() {
 		return time;

@@ -1,4 +1,4 @@
-package test;
+
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -25,7 +25,7 @@ public class gateSerlvet extends HttpServlet {
 		dto.setCar_num(request.getParameter("car_num"));
 		
 		gateDAO dao = new gateDAO();
-		dao.insert(dto);
+		dao.inputInCarLog(dto);
 		
 		response.sendRedirect("/WebTest/gate.jsp");
 	}

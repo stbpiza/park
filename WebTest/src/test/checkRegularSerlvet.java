@@ -22,12 +22,15 @@ public class checkRegularSerlvet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		
-		String car_num = request.getParameter("car_num");
-		String gate_id = request.getParameter("gate_id");
+		String car_num = (String)request.getAttribute("car_num");
+		String gate_id = (String)request.getAttribute("gate_id");
 		String time ;
 		
-		DAO.checkRegularDAO check = new DAO.checkRegularDAO();
-		time = check.getTime(car_num);
+		DTO.regularDTO regDto = new DTO.regularDTO();
+		regDto.setCar_num(car_num);
+		
+		DAO.RegularDAO check = new DAO.RegularDAO();
+		time = check.getTime(regDto);
 		
 		if (time != null) {                                             //정기로그에 있는경우
 			
@@ -40,17 +43,16 @@ public class checkRegularSerlvet extends HttpServlet {
 	       if (now.before(timeDate)) {
 	    	   
 	    	   //response.sendRedirect("/WebTest/bye.jsp"); // 임시
-	    	   
+
 				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", "1");
 				rq.forward(request,response);
 	       }
 	       else {
-				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //날짜지남
+				RequestDispatcher rq = request.getRequestDispatcher("/signUp.jsp");  //날짜지남
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("car_num", car_num);
-				request.setAttribute("regular_non", "0");
 				rq.forward(request,response);
 
 	       }
@@ -63,10 +65,9 @@ public class checkRegularSerlvet extends HttpServlet {
 
 	}
 		else {                                                                          //정기로그에 없는경우
-			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  
+			RequestDispatcher rq = request.getRequestDispatcher("/signUp.jsp");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
-			request.setAttribute("regular_non", "0");
 			rq.forward(request,response);
 		}
 		

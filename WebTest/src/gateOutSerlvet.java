@@ -1,4 +1,4 @@
-package test;
+
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import DAO.gateOutDAO;
+
 import DTO.gateDTO;
 
 @WebServlet("/gateOutSerlvet")
@@ -27,8 +27,8 @@ public class gateOutSerlvet extends HttpServlet {
 		gateDTO dto = new gateDTO();
 		dto.setCar_num(car_num);
 		
-		gateOutDAO dao = new gateOutDAO();
-		dao.insert(dto);
+		DAO.gateDAO dao = new DAO.gateDAO();
+		dao.inputOutCarLog(dto);
 		
 	}
 

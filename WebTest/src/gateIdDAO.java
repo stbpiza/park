@@ -1,4 +1,4 @@
-package DAO;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class checkRegularDAO {
+public class gateIdDAO {
 	private Connection getConnection() throws SQLException {
         Connection conn = null;
 
@@ -22,8 +22,9 @@ public class checkRegularDAO {
 
         return conn;
     }
-	public String getTime(String car_num) {
-		String time = null;
+	
+	public String getId(DTO.gateDTO gateDto) {
+		String gate_id = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -31,25 +32,25 @@ public class checkRegularDAO {
 		try {
 			conn = getConnection();
 			
-			String sql = "SELECT end_time FROM regular WHERE car_num = ? ORDER BY end_time DESC LIMIT 1";
+			String sql = "SELECT gate_id FROM gate WHERE car_num = ? AND in_out = 0 ORDER BY time DESC LIMIT 1";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, car_num);
+			pstmt.setString(1, gateDto.getCar_num());
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				DTO.regularDTO regDto = new DTO.regularDTO();
-				regDto.setEnd_time(rs.getString(1));
+				//DTO.gateDTO gateDto = new DTO.gateDTO();
+				gateDto.setGate_id(rs.getString(1));
 				
-				time = regDto.getEnd_time();
+				gate_id = gateDto.getGate_id();
 			}
+			
 		}
 		catch (SQLException e){
 			e.printStackTrace();
 			
 		}
 		
-		return time;
+		return gate_id;
 	}
-	
 }
