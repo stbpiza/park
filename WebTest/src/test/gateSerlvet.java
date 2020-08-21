@@ -29,13 +29,11 @@ public class gateSerlvet extends HttpServlet {
 		
 		String car_num = (String)request.getAttribute("car_num");
 		String gate_id = (String)request.getAttribute("gate_id");
-		String regular_non = (String)request.getAttribute("regular_non");
 		
 		System.out.println();                                      //테스트출력영역
 		System.out.println("gateSerlvet");
 		System.out.println("car_num " + car_num);
 		System.out.println("gate_id " + gate_id);
-		System.out.println("regular_non " + regular_non);
 		
 		gateDTO dto = new gateDTO();
 		dto.setCar_num(car_num);
@@ -60,7 +58,6 @@ public class gateSerlvet extends HttpServlet {
 			RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", regular_non);
 			request.setAttribute("usedMinute", Integer.toString(usedMinute));
 			rq.forward(request,response);
 		} 

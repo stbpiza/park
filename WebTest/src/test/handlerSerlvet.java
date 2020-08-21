@@ -100,17 +100,34 @@ public class handlerSerlvet extends HttpServlet {
 			rq.forward(request,response);
 			}
 			else {
+				gate_id = gateDao.getId(gateDto);
+				gateDto.setGate_id(gate_id);
+				
+				DTO.receiptDTO recDto = new DTO.receiptDTO();
+				recDto.setGate_id(gate_id);
+				
+				DAO.receiptDAO recDao = new DAO.receiptDAO();
+				String rec_id = recDao.checkReceipt(recDto);
+				
+				if (rec_id == null) {                           //로그만 찍히고 계산안됨
+					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/repay.jsp"); 
+					request.setAttribute("car_num", car_num);
+					request.setAttribute("gate_id", gate_id);
+					rq.forward(request,response);
+				}
+				
+				else {                                             //계산하고 나갔는데 또 출차?
 				in_out = "0";
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  //입차 안된차
 				request.setAttribute("in_out", in_out);
 				rq.forward(request,response);	
+				}
 			}
 		}
 		else if (payed.contentEquals("no") && usedMinute == null) {
 			RequestDispatcher rq = request.getRequestDispatcher("/gateSerlvet");  //이용시간계산
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", "0");
 			rq.forward(request,response);
 		}
 		else if (payed.contentEquals("no")) {

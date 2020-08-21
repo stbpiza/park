@@ -9,12 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet("/cardSerlvet")
-public class cardSerlvet extends HttpServlet {
+@WebServlet("/cashSerlvet")
+public class cashSerlvet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public cardSerlvet() {
+    public cashSerlvet() {
         super();
     }
 
@@ -25,13 +24,14 @@ public class cardSerlvet extends HttpServlet {
 		String gate_id = request.getParameter("gate_id");
 		String regular_non = request.getParameter("regular_non");
 		String price = request.getParameter("price");
-		
+
+
 		RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //
 		request.setAttribute("car_num", car_num);
 		request.setAttribute("gate_id", gate_id);
 		request.setAttribute("regular_non", regular_non);
 		request.setAttribute("price", price);
-		request.setAttribute("kind", "card");
+		request.setAttribute("kind", "cash");
 		rq.forward(request,response);
 	}
 

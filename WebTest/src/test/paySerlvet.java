@@ -33,6 +33,8 @@ public class paySerlvet extends HttpServlet {
 		if (regular_non == null) {
 			regular_non = "notUse";
 		}
+		String price = (String)request.getAttribute("price");
+		String kind = (String)request.getAttribute("kind");
 		String remainingDays = (String)request.getAttribute("remainingDays");
 		String usedMinute = (String)request.getAttribute("usedMinute");
 		String reg = request.getParameter("reg");
@@ -46,48 +48,69 @@ public class paySerlvet extends HttpServlet {
 		System.out.println("regular_non " + regular_non);
 		System.out.println("gate_id " + gate_id);
 		System.out.println("reg " + reg);
+		System.out.println("price " + price);
+		System.out.println("kind " + kind);
 		System.out.println("remainingDays " + remainingDays);
 		System.out.println("usedMinute " + usedMinute);
 		
+		if (price == null){
+			if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
+				DTO.receiptDTO recDto = new DTO.receiptDTO();
+				recDto.setPay_price("0");
+				recDto.setRegular_non("1");
+				recDto.setGate_id(gate_id);
+				
+				DAO.receiptDAO dao = new DAO.receiptDAO();
+				dao.insert(recDto);
+				
+				RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
+				request.setAttribute("payed", "yes");
+				request.setAttribute("remainingDays", remainingDays);
+				rq.forward(request,response);
+			}
+			else if (regular_non.contentEquals("new")) {                                    //정기 신규 등록하는사람
+				String reg_price = "50000";
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp"); 
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("reg_price", reg_price);
+				rq.forward(request,response);
+				
+			}
+			
+			else if (regular_non.contentEquals("0")) {              //일반 결제 할사람
+				
 
-		if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
-			DTO.receiptDTO recDto = new DTO.receiptDTO();
-			recDto.setPay_price("0");
-			recDto.setRegular_non("1");
-			recDto.setGate_id(gate_id);
-			
-			DAO.receiptDAO dao = new DAO.receiptDAO();
-			dao.insert(recDto);
-			
-			RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
-			request.setAttribute("payed", "yes");
-			request.setAttribute("remainingDays", remainingDays);
-			rq.forward(request,response);
+				int pricePerHour = 1000;
+				int time_price = (int)Math.ceil(Double.parseDouble(usedMinute)/60) * pricePerHour;
+				
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", "0");
+				request.setAttribute("time_price", Integer.toString(time_price));
+				rq.forward(request,response);
+	
+			}
+	}
+		else {
+			if (kind.contentEquals("card")){
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("price", price);
+				rq.forward(request,response);
+			}
+			else if(kind.contentEquals("cash")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("price", price);
+				rq.forward(request,response);
+			}
 		}
-		else if (reg.contentEquals("yes")) {                                    //정기 신규 등록하는사람
-			String reg_price = "50000";
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp"); 
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("reg_price", reg_price);
-			rq.forward(request,response);
-			
-		}
-		
-		else if (regular_non.contentEquals("0")) {              //일반 결제 할사람
-			
-			int pricePerHour = 1000;
-			int time_price = (int)Math.ceil(Double.parseDouble(usedMinute)/60) * pricePerHour;
-			
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", "0");
-			request.setAttribute("time_price", Integer.toString(time_price));
-			rq.forward(request,response);
-
-		}
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

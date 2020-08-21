@@ -23,60 +23,70 @@ public class RegularSerlvet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		
 		String car_num = (String)request.getAttribute("car_num");
+		if (car_num == null) {
+			car_num = request.getParameter("car_num");
+		}
 		String gate_id = (String)request.getAttribute("gate_id");
-		String time ;
+		if (gate_id == null) {
+			gate_id = request.getParameter("gate_id");
+		}
+		String reg = request.getParameter("reg");
 		
-		DTO.regularDTO regDto = new DTO.regularDTO();
-		regDto.setCar_num(car_num);
-		
-		DAO.RegularDAO check = new DAO.RegularDAO();
-		time = check.getTime(regDto);
-		
-		if (time != null) {                                             //정기로그에 있는경우
+		if (reg == null) { // 정기유무 확인파트
+			String time ;
 			
-       Date now = new Date();
-       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-       try {
-		Date timeDate = format.parse(time);                      
-		long remainingTime = timeDate.getTime() - now.getTime();
-		int remainingDays = (int)remainingTime/(1000*60*60*24);
-		
-	       if (remainingDays > 0) {
-	    	   
-	    	   //response.sendRedirect("/WebTest/bye.jsp"); // 임시
-
-				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
-				request.setAttribute("gate_id", gate_id);
-				request.setAttribute("regular_non", "1");
-				request.setAttribute("remainingDays", Integer.toString(remainingDays));
-				rq.forward(request,response);
-	       }
-	       else {
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
+			DTO.regularDTO regDto = new DTO.regularDTO();
+			regDto.setCar_num(car_num);
+			
+			DAO.RegularDAO check = new DAO.RegularDAO();
+			time = check.getTime(regDto);
+			
+			if (time != null) {                                             //정기로그에 있는경우
+			
+	       Date now = new Date();
+	       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	
+	       try {
+			Date timeDate = format.parse(time);                      
+			long remainingTime = timeDate.getTime() - now.getTime();
+			int remainingDays = (int)remainingTime/(1000*60*60*24);
+			
+		       if (remainingDays > 0) {
+		    	   	RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
+					request.setAttribute("gate_id", gate_id);
+					request.setAttribute("regular_non", "1");
+					request.setAttribute("remainingDays", Integer.toString(remainingDays));
+					rq.forward(request,response);
+		       }
+		       else {
+					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
+					request.setAttribute("gate_id", gate_id);
+					request.setAttribute("car_num", car_num);
+					rq.forward(request,response);
+		       }
+		} 
+	       catch (ParseException e) {
+			e.printStackTrace();
+		}
+		}
+			else {                                                                          //정기로그에 없는경우
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("car_num", car_num);
 				rq.forward(request,response);
-
-	       }
-		
-		
-	} 
-       catch (ParseException e) {
-		e.printStackTrace();
+			}
 	}
-
-	}
-		else {                                                                          //정기로그에 없는경우
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  
+		else if (reg.contentEquals("yes")) {                                           //정기 신규등록 파트
+			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
+			request.setAttribute("regular_non", "new");
 			rq.forward(request,response);
 		}
 		
 		
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
