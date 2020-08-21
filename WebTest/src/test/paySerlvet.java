@@ -31,21 +31,26 @@ public class paySerlvet extends HttpServlet {
 		}
 		String regular_non = (String)request.getAttribute("regular_non");
 		if (regular_non == null) {
-			regular_non = "2";
+			regular_non = "notUse";
 		}
+		String remainingDays = (String)request.getAttribute("remainingDays");
+		String usedMinute = (String)request.getAttribute("usedMinute");
 		String reg = request.getParameter("reg");
 		if (reg == null) {
-			reg = "3";
+			reg = "notUse";
 		}
+		
 		System.out.println();
 		System.out.println("paySerlvet");
 		System.out.println("car_num " + car_num);
 		System.out.println("regular_non " + regular_non);
 		System.out.println("gate_id " + gate_id);
 		System.out.println("reg " + reg);
+		System.out.println("remainingDays " + remainingDays);
+		System.out.println("usedMinute " + usedMinute);
 		
 
-		if (regular_non.equals("1")) {                              //기존 정기 회원 영수증
+		if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
 			DTO.receiptDTO recDto = new DTO.receiptDTO();
 			recDto.setPay_price("0");
 			recDto.setRegular_non("1");
@@ -54,28 +59,32 @@ public class paySerlvet extends HttpServlet {
 			DAO.receiptDAO dao = new DAO.receiptDAO();
 			dao.insert(recDto);
 			
-			
-			
-			//response.sendRedirect("/WebTest/bye.jsp");                //문열어주기
-			
 			RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
 			request.setAttribute("payed", "yes");
+			request.setAttribute("remainingDays", remainingDays);
 			rq.forward(request,response);
 		}
-		else if (reg.equals("yes")) {                                    //정기 신규 등록하는사람
-			
-			RequestDispatcher rq = request.getRequestDispatcher("/pay.jsp"); 
+		else if (reg.contentEquals("yes")) {                                    //정기 신규 등록하는사람
+			String reg_price = "50000";
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp"); 
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("reg_price", "50000");
+			request.setAttribute("reg_price", reg_price);
 			rq.forward(request,response);
 			
-			// response.sendRedirect("/WebTest/pay.jsp"); //임시
 		}
-		else if (regular_non.equals("0")) {                               //일반 결제 할사람
+		
+		else if (regular_non.contentEquals("0")) {              //일반 결제 할사람
 			
+			int pricePerHour = 1000;
+			int time_price = (int)Math.ceil(Double.parseDouble(usedMinute)/60) * pricePerHour;
 			
-			response.sendRedirect("/WebTest/pay.jsp"); //임시
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
+			request.setAttribute("car_num", car_num);
+			request.setAttribute("gate_id", gate_id);
+			request.setAttribute("regular_non", "0");
+			request.setAttribute("time_price", Integer.toString(time_price));
+			rq.forward(request,response);
 
 		}
 		

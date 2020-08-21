@@ -120,13 +120,63 @@ public class gateDAO {
 					
 					gate_id = gateDto.getGate_id();
 				}
-				
 			}
 			catch (SQLException e){
 				e.printStackTrace();
-				
 			}
-			
 			return gate_id;
+		}
+		
+		public String getIn_out(DTO.gateDTO gateDto) {
+			String in_out = null;
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+				conn = getConnection();
+				
+				String sql = "SELECT in_out FROM gate WHERE car_num = ? ORDER BY time DESC LIMIT 1";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, gateDto.getCar_num());
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					gateDto.setIn_out(rs.getString(1));
+					in_out = gateDto.getIn_out();
+				}
+			}
+			catch (SQLException e){
+				e.printStackTrace();
+			}
+			return in_out;
+		}
+		
+		public String getTime(DTO.gateDTO gateDto, String in_out) {
+			String Time = null;
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+				conn = getConnection();
+				
+				String sql = "SELECT time FROM gate WHERE car_num = ? and in_out = ? ORDER BY time DESC LIMIT 1";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, gateDto.getCar_num());
+				pstmt.setString(2, in_out);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					gateDto.setTime(rs.getString(1));
+					Time = gateDto.getTime();
+				}
+			}
+			catch (SQLException e){
+				e.printStackTrace();
+			}
+			return Time;
 		}
 }

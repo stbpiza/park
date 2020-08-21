@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import DAO.gateDAO;
 import DTO.gateDTO;
 
-@WebServlet("/gateSerlvet")
-public class gateSerlvet extends HttpServlet {
+@WebServlet("/gateInSerlvet")
+public class gateInSerlvet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public gateSerlvet() {
+    public gateInSerlvet() {
         super();
     }
 

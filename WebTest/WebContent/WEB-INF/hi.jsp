@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" http-equiv="refresh" content="5; url=/WebTest/gate.jsp" />
 <title>Insert title here</title>
 </head>
 <body>
-문이 열렸습니다.<br>
-안녕히가세요.
+환영합니다<br>
+입차되었습니다.<br>
 <a href="/WebTest/gate.jsp">돌아가기</a>
 </body>
 </html>

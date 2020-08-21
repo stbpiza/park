@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/checkRegularSerlvet")
-public class checkRegularSerlvet extends HttpServlet {
+@WebServlet("/regularSerlvet")
+public class RegularSerlvet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public checkRegularSerlvet() {
+    public RegularSerlvet() {
         super();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,18 +39,21 @@ public class checkRegularSerlvet extends HttpServlet {
 
        try {
 		Date timeDate = format.parse(time);                      
+		long remainingTime = timeDate.getTime() - now.getTime();
+		int remainingDays = (int)remainingTime/(1000*60*60*24);
 		
-	       if (now.before(timeDate)) {
+	       if (remainingDays > 0) {
 	    	   
 	    	   //response.sendRedirect("/WebTest/bye.jsp"); // 임시
 
 				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", "1");
+				request.setAttribute("remainingDays", Integer.toString(remainingDays));
 				rq.forward(request,response);
 	       }
 	       else {
-				RequestDispatcher rq = request.getRequestDispatcher("/signUp.jsp");  //날짜지남
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("car_num", car_num);
 				rq.forward(request,response);
@@ -65,7 +68,7 @@ public class checkRegularSerlvet extends HttpServlet {
 
 	}
 		else {                                                                          //정기로그에 없는경우
-			RequestDispatcher rq = request.getRequestDispatcher("/signUp.jsp");  
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
 			rq.forward(request,response);
