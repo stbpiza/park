@@ -41,6 +41,10 @@ public class adminSerlvet extends HttpServlet {
 		if (back == null) {
 			back = "notUse";
 		}
+		String page = request.getParameter("page");
+		if (page == null) {
+			page = "notUse";
+		}
 		
 		System.out.println();
 		System.out.println("adminSerlvet");
@@ -50,9 +54,10 @@ public class adminSerlvet extends HttpServlet {
 		System.out.println("price " + price);
 		System.out.println("password " + password);
 		System.out.println("back " + back);
+		System.out.println("page " + page);
 		
 		try {
-		gate_id.contentEquals("test"); // 비정상 접근 방지
+		//gate_id.contentEquals("test"); // 비정상 접근 방지
 		
 		if (password == null && back.contentEquals("notUse")) {
 		RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
@@ -71,7 +76,7 @@ public class adminSerlvet extends HttpServlet {
 			request.setAttribute("price", price);
 			rq.forward(request,response);
 		}
-		else if (password.contentEquals("0000")) {
+		else if (page.contentEquals("notUse") && password.contentEquals("0000")) {
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
@@ -79,7 +84,7 @@ public class adminSerlvet extends HttpServlet {
 			request.setAttribute("admin", "yes");
 			rq.forward(request,response);
 		}
-		else if (!password.contentEquals("0000")){
+		else if (page.contentEquals("notUse") && !password.contentEquals("0000")){
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
@@ -88,7 +93,19 @@ public class adminSerlvet extends HttpServlet {
 			request.setAttribute("admin", "no");
 			rq.forward(request,response);
 		}
-		
+		else if (page.contentEquals("admin")) {
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
+			rq.forward(request,response);
+		}
+		else if (page.contentEquals("check") && password.contentEquals("0000")) {
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp"); 
+			rq.forward(request,response);
+		}
+		else if (page.contentEquals("check")) {
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
+			request.setAttribute("error", "1");
+			rq.forward(request,response);
+		}
 		
 		}
 		catch(Exception e){

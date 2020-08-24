@@ -17,10 +17,10 @@ String admin = (String)request.getAttribute("admin");
 </head>
 <body>
 <%if (!admin.contentEquals("yes")) {%>
-암호를 입력해 주세요.<br>
+암호를 입력해 주세요.(숫자만)<br>
 
 	<form action="/WebTest/adminSerlvet" method="post">
-	<p><input type="password" name="password"></p>
+	<p><input type="password" name="password" required pattern="(\d{1,10})"></p>
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>
@@ -43,7 +43,7 @@ String admin = (String)request.getAttribute("admin");
 <%if (admin.contentEquals("yes")) {%>
 가격을 입력해주세요.<br>
 	<form action="/WebTest/paySerlvet" method="post">
-	<p><input type="text" name="price" required pattern="(\d+)([0]{3})|([0])"></p>
+	<p><input type="text" name="price" required pattern="(\d{1,5})([0]{3})|([0])"></p>
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>

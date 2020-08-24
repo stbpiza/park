@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 
@@ -83,7 +84,12 @@ public class paySerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (regular_non.contentEquals("new")) {                                    //정기 신규 등록하는사람
-				String reg_price = "50000";
+				HttpSession session = request.getSession();
+				String reg_price = (String)session.getAttribute("setReg_price");
+				System.out.println("reg_price " + reg_price);
+				if (reg_price == null) {
+					reg_price = "50000";
+				}
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp"); 
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -94,9 +100,14 @@ public class paySerlvet extends HttpServlet {
 			
 			else if (regular_non.contentEquals("0")) {              //일반 결제 할사람
 				
-
-				int pricePerHour = 1000;
-				int time_price = (int)Math.ceil(Double.parseDouble(usedMinute)/60) * pricePerHour;
+				HttpSession session = request.getSession();
+				String pricePerHourString = (String)session.getAttribute("setPricePerHour");
+				System.out.println("pricePerHour " + pricePerHourString);
+				if (pricePerHourString == null) {
+					pricePerHourString = "1000";
+				}
+				int priceperHour = Integer.parseInt(pricePerHourString);
+				int time_price = (int)Math.ceil(Double.parseDouble(usedMinute)/60) * priceperHour;
 				
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
 				request.setAttribute("car_num", car_num);

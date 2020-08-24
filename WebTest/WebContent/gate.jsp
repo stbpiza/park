@@ -19,6 +19,11 @@
 	</form>
 </section>
 
-<br> <a href="/WEB-INF/admin.jsp">관리자</a>
+<br>
+	<form action="/WebTest/adminSerlvet" method="post">
+	<input type="hidden" name="page" value="admin">
+	<input type="hidden" name="back" value="first">
+		<p><input type="submit" value="관리자모드"></p>
+	</form>
 </body>
 </html>
