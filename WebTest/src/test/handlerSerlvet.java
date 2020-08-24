@@ -48,6 +48,8 @@ public class handlerSerlvet extends HttpServlet {
 		System.out.println("remainingDays " + remainingDays);
 		System.out.println("usedMinute " + usedMinute);
 		
+		try {
+			//gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (car.contentEquals("incar") && payed == null) {                                       //입차 로그 찍기
 			//RequestDispatcher rq = request.getRequestDispatcher("/gateSerlvet");  
 			//request.setAttribute("car_num", car_num);
@@ -145,7 +147,12 @@ public class handlerSerlvet extends HttpServlet {
 			rq.forward(request,response);
 			//response.sendRedirect("/WebTest/bye.jsp");
 		}
-		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			rq.forward(request,response);
+		}
 	}
 
 	

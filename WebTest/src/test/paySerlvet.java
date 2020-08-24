@@ -53,6 +53,8 @@ public class paySerlvet extends HttpServlet {
 		System.out.println("remainingDays " + remainingDays);
 		System.out.println("usedMinute " + usedMinute);
 		
+		try {
+			gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (price == null){
 			if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
 				DTO.receiptDTO recDto = new DTO.receiptDTO();
@@ -110,6 +112,12 @@ public class paySerlvet extends HttpServlet {
 				request.setAttribute("price", price);
 				rq.forward(request,response);
 			}
+		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			rq.forward(request,response);
 		}
 	}
 

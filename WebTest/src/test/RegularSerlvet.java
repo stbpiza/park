@@ -32,14 +32,20 @@ public class RegularSerlvet extends HttpServlet {
 		}
 		String reg = request.getParameter("reg");
 		
+		System.out.println("car_num " + car_num);
+		System.out.println("gate_id " + gate_id);
+		System.out.println("reg " + reg);
+		
+		try {
+		gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (reg == null) { // 정기유무 확인파트
 			String time ;
 			
 			DTO.regularDTO regDto = new DTO.regularDTO();
 			regDto.setCar_num(car_num);
 			
-			DAO.RegularDAO check = new DAO.RegularDAO();
-			time = check.getTime(regDto);
+			DAO.RegularDAO checkReg = new DAO.RegularDAO();
+			time = checkReg.getTime(regDto);
 			
 			if (time != null) {                                             //정기로그에 있는경우
 			
@@ -83,7 +89,12 @@ public class RegularSerlvet extends HttpServlet {
 			request.setAttribute("regular_non", "new");
 			rq.forward(request,response);
 		}
-		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			rq.forward(request,response);
+		}
 		
 	}
 	

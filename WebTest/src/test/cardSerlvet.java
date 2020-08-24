@@ -25,7 +25,8 @@ public class cardSerlvet extends HttpServlet {
 		String gate_id = request.getParameter("gate_id");
 		String regular_non = request.getParameter("regular_non");
 		String price = request.getParameter("price");
-		
+		try {
+		gate_id.contentEquals("test"); // 비정상 접근 방지
 		RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //
 		request.setAttribute("car_num", car_num);
 		request.setAttribute("gate_id", gate_id);
@@ -33,6 +34,12 @@ public class cardSerlvet extends HttpServlet {
 		request.setAttribute("price", price);
 		request.setAttribute("kind", "card");
 		rq.forward(request,response);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			rq.forward(request,response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

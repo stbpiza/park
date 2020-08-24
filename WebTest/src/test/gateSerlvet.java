@@ -35,6 +35,8 @@ public class gateSerlvet extends HttpServlet {
 		System.out.println("car_num " + car_num);
 		System.out.println("gate_id " + gate_id);
 		
+		try {
+	    gate_id.contentEquals("test"); // 비정상 접근 방지
 		gateDTO dto = new gateDTO();
 		dto.setCar_num(car_num);
 		
@@ -66,7 +68,12 @@ public class gateSerlvet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			rq.forward(request,response);
+		}
 		
 
 		//response.sendRedirect("/WebTest/gate.jsp");

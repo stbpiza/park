@@ -4,12 +4,16 @@
 request.setCharacterEncoding("utf-8");
 String in_out = (String)request.getAttribute("in_out");
 String text="";
-if (in_out.contentEquals("1")){
+if (in_out == null){
+	text="잘못된 접근입니다!";
+}
+else if (in_out.contentEquals("1")){
   text="이미 입차된 차량입니다!";
 }
 else if (in_out.contentEquals("0")){
 	text="입차되지 않은 차량입니다!";
 }
+
 %>
 <!DOCTYPE html>
 <html>
