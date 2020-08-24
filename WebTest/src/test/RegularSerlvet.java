@@ -30,8 +30,13 @@ public class RegularSerlvet extends HttpServlet {
 		if (gate_id == null) {
 			gate_id = request.getParameter("gate_id");
 		}
-		String reg = request.getParameter("reg");
+		String reg = (String)request.getAttribute("reg");
+		if (reg == null) {
+			reg = request.getParameter("reg");
+		}
+		String rec_id = (String)request.getAttribute("rec_id");
 		
+		System.out.println();
 		System.out.println("car_num " + car_num);
 		System.out.println("gate_id " + gate_id);
 		System.out.println("reg " + reg);
@@ -46,6 +51,7 @@ public class RegularSerlvet extends HttpServlet {
 			
 			DAO.RegularDAO checkReg = new DAO.RegularDAO();
 			time = checkReg.getTime(regDto);
+			System.out.println("time " + time);
 			
 			if (time != null) {                                             //정기로그에 있는경우
 			
@@ -55,8 +61,9 @@ public class RegularSerlvet extends HttpServlet {
 	       try {
 			Date timeDate = format.parse(time);                      
 			long remainingTime = timeDate.getTime() - now.getTime();
-			int remainingDays = (int)remainingTime/(1000*60*60*24);
-			
+			System.out.println("remainingTime " + remainingTime);
+			int remainingDays = (int)(remainingTime/(1000*60*60*24));
+			System.out.println("remainingDays " + remainingDays);
 		       if (remainingDays > 0) {
 		    	   	RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
 					request.setAttribute("gate_id", gate_id);
@@ -65,6 +72,8 @@ public class RegularSerlvet extends HttpServlet {
 					rq.forward(request,response);
 		       }
 		       else {
+		    	   
+		    	   
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
 					request.setAttribute("gate_id", gate_id);
 					request.setAttribute("car_num", car_num);
@@ -83,10 +92,26 @@ public class RegularSerlvet extends HttpServlet {
 			}
 	}
 		else if (reg.contentEquals("yes")) {                                           //정기 신규등록 파트
+			
+			
+			
 			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("regular_non", "new");
+			rq.forward(request,response);
+		}
+		
+		else {
+			DTO.regularDTO regDto = new DTO.regularDTO();
+			regDto.setCar_num(car_num);
+			regDto.setRec_id(rec_id);
+			
+			DAO.RegularDAO regDao = new DAO.RegularDAO();
+			regDao.insert(regDto);
+			
+			RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  
+			request.setAttribute("payed", "yes");
 			rq.forward(request,response);
 		}
 		}

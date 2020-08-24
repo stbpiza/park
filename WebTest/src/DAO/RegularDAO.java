@@ -52,4 +52,40 @@ public class RegularDAO {
 		return time;
 	}
 	
+    public boolean insert(DTO.regularDTO regDto ) {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+
+            String sql = "INSERT INTO regular (car_num, end_time, rec_id) VALUES (?, DATE_ADD(now(), INTERVAL 30 DAY), ?);";
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, regDto.getCar_num());
+            pstmt.setString(2, regDto.getRec_id());
+            int count = pstmt.executeUpdate();
+
+            result = (count == 1);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if( conn != null ) {
+                    conn.close();
+                }
+                if( pstmt != null ) {
+                    pstmt.close();
+                }
+            }
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 }

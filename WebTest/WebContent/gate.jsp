@@ -18,7 +18,7 @@
 		<p><input type="submit" name="car" value="outcar"></p>
 	</form>
 </section>
-	<a href="/WEB-INF/pay.jsp">결제창</a>
+
 <br> <a href="/WEB-INF/admin.jsp">관리자</a>
 </body>
 </html>

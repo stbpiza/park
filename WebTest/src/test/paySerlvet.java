@@ -1,6 +1,8 @@
 package test;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,27 +33,37 @@ public class paySerlvet extends HttpServlet {
 		}
 		String regular_non = (String)request.getAttribute("regular_non");
 		if (regular_non == null) {
+			regular_non = request.getParameter("regular_non");
+		}
+		if (regular_non == null) {
 			regular_non = "notUse";
 		}
 		String price = (String)request.getAttribute("price");
+		if (price == null) {
+			price = request.getParameter("price");
+		}
 		String kind = (String)request.getAttribute("kind");
+		if (kind == null) {
+			kind = request.getParameter("kind");
+		}
+		if (kind == null) {
+			kind = "notUse";
+		}
 		String remainingDays = (String)request.getAttribute("remainingDays");
 		String usedMinute = (String)request.getAttribute("usedMinute");
-		String reg = request.getParameter("reg");
-		if (reg == null) {
-			reg = "notUse";
-		}
-		
+		String coupon = request.getParameter("coupon");
+		String error = request.getParameter("error");
 		System.out.println();
 		System.out.println("paySerlvet");
 		System.out.println("car_num " + car_num);
 		System.out.println("regular_non " + regular_non);
 		System.out.println("gate_id " + gate_id);
-		System.out.println("reg " + reg);
 		System.out.println("price " + price);
 		System.out.println("kind " + kind);
 		System.out.println("remainingDays " + remainingDays);
 		System.out.println("usedMinute " + usedMinute);
+		System.out.println("coupon " + coupon);
+		System.out.println("error " + error);
 		
 		try {
 			gate_id.contentEquals("test"); // 비정상 접근 방지
@@ -96,7 +108,38 @@ public class paySerlvet extends HttpServlet {
 			}
 	}
 		else {
-			if (kind.contentEquals("card")){
+			if (kind.contentEquals("coupon")) {                     //방문증 할인 계산
+				Date now = new Date();
+				SimpleDateFormat format = new SimpleDateFormat("MMdd");
+				String nowString = format.format(now);
+				int priceInt = Integer.parseInt(price);
+				if((coupon.substring(0,4)).contentEquals(nowString)) { //방문증 인식 성공
+					priceInt = priceInt - 2000;
+					if (priceInt < 0) {
+						priceInt = 0;
+					}
+					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
+					request.setAttribute("car_num", car_num);
+					request.setAttribute("gate_id", gate_id);
+					request.setAttribute("regular_non", "0");
+					request.setAttribute("price", Integer.toString(priceInt));
+					rq.forward(request,response);
+		
+				}
+				else {                                           //방문증 인식 오류
+					int errorInt = Integer.parseInt(error);
+					errorInt++;
+					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
+					request.setAttribute("car_num", car_num);
+					request.setAttribute("gate_id", gate_id);
+					request.setAttribute("regular_non", "0");
+					request.setAttribute("time_price", price);
+					request.setAttribute("error",Integer.toString(errorInt));
+					rq.forward(request,response);
+				}
+				
+			}
+			else if (kind.contentEquals("card")){          //카드계산
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -104,7 +147,7 @@ public class paySerlvet extends HttpServlet {
 				request.setAttribute("price", price);
 				rq.forward(request,response);
 			}
-			else if(kind.contentEquals("cash")) {
+			else if(kind.contentEquals("cash")) {            //현금계산
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -112,7 +155,31 @@ public class paySerlvet extends HttpServlet {
 				request.setAttribute("price", price);
 				rq.forward(request,response);
 			}
+			else {                                             //결제 완료된 요청들
+				DTO.receiptDTO recDto = new DTO.receiptDTO();
+				recDto.setPay_price(price);
+				recDto.setRegular_non(regular_non);
+				recDto.setGate_id(gate_id);
+				
+				DAO.receiptDAO dao = new DAO.receiptDAO();
+				dao.insert(recDto);
+				
+				if (regular_non.contentEquals("0")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
+				request.setAttribute("payed", "yes");
+				rq.forward(request,response);
+				}
+				else {
+					String rec_id = dao.checkReceipt(recDto);
+					RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  //정기핸들러에게 가입로그 전송
+					request.setAttribute("reg", "new");
+					request.setAttribute("car_num", car_num);
+					request.setAttribute("rec_id", rec_id);
+					rq.forward(request,response);
+				}
+			}
 		}
+		
 		}
 		catch(Exception e){
 			e.printStackTrace();

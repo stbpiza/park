@@ -51,9 +51,7 @@ public class handlerSerlvet extends HttpServlet {
 		try {
 			//gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (car.contentEquals("incar") && payed == null) {                                       //입차 로그 찍기
-			//RequestDispatcher rq = request.getRequestDispatcher("/gateSerlvet");  
-			//request.setAttribute("car_num", car_num);
-			//rq.forward(request,response);
+
 			
 			gateDTO gateDto = new gateDTO();
 			gateDto.setCar_num(car_num);
@@ -61,26 +59,46 @@ public class handlerSerlvet extends HttpServlet {
 			gateDAO gateDao = new gateDAO();
 			in_out = gateDao.getIn_out(gateDto);
 			
-			if (in_out == null || in_out.contentEquals("0")) {  //정상입차
+			if (in_out == null) {  //정상입차 - 처음와본차량
 			gateDao.inputInCarLog(gateDto);
 			
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/hi.jsp");
 			rq.forward(request,response);	
+			}
+			
+			else if (in_out.contentEquals("0")) {  //출차로그 찍힌 후 계산유무 확인
+			gate_id = gateDao.getId(gateDto);
+			
+			DTO.receiptDTO recDto = new DTO.receiptDTO();
+			recDto.setGate_id(gate_id);
+			
+			DAO.receiptDAO recDao = new DAO.receiptDAO();
+			String rec_id = recDao.checkReceipt(recDto);
+			
+			if (rec_id == null) {                           //계산 안된차
+				in_out="1";
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+				request.setAttribute("in_out", in_out);
+				rq.forward(request,response);	
+			}
+			
+			else {                                     //정상입차
+			gateDao.inputInCarLog(gateDto);
+			
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/hi.jsp");
+			rq.forward(request,response);
+			}
 			}
 			else {
 			in_out="1";
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  //이미 입차된 차
 			request.setAttribute("in_out", in_out);
 			rq.forward(request,response);	
-			//response.sendRedirect("/WebTest/secondInError.jsp");
 			}
 			
 			
 		}
 		else if (car.contentEquals("outcar") && payed == null) {                            //출차 로그 찍기
-			//RequestDispatcher rq = request.getRequestDispatcher("/gateOutSerlvet");  
-			//request.setAttribute("car_num", car_num);
-			//rq.forward(request,response);
 			
 			gateDTO gateDto = new gateDTO();
 			gateDto.setCar_num(car_num);
@@ -90,7 +108,6 @@ public class handlerSerlvet extends HttpServlet {
 			
 			if (in_out == null || in_out.contentEquals("1")) {
 			gateDao.inputOutCarLog(gateDto);
-			
 			
 			gate_id = gateDao.getId(gateDto);
 			gateDto.setGate_id(gate_id);
@@ -112,6 +129,9 @@ public class handlerSerlvet extends HttpServlet {
 				String rec_id = recDao.checkReceipt(recDto);
 				
 				if (rec_id == null) {                           //로그만 찍히고 계산안됨
+					gateDao.inputOutCarLog(gateDto);
+					gate_id = gateDao.getId(gateDto);
+					
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/repay.jsp"); 
 					request.setAttribute("car_num", car_num);
 					request.setAttribute("gate_id", gate_id);

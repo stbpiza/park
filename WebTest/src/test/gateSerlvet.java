@@ -76,7 +76,6 @@ public class gateSerlvet extends HttpServlet {
 		}
 		
 
-		//response.sendRedirect("/WebTest/gate.jsp");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

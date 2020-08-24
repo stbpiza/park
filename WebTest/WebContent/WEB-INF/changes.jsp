@@ -6,6 +6,7 @@ String car_num = (String)request.getAttribute("car_num");
 String gate_id = (String)request.getAttribute("gate_id");
 String regular_non = (String)request.getAttribute("regular_non");
 String price = (String)request.getAttribute("price");
+String changes = (String)request.getAttribute("changes");
 
 %>
 <!DOCTYPE html>
@@ -15,14 +16,14 @@ String price = (String)request.getAttribute("price");
 <title>Insert title here</title>
 </head>
 <body>
-<%=price %>원 입니다.<br>
-카드를 긁어주세요.<br>
+<%=changes%>원 반환되었습니다.
 	<form action="/WebTest/paySerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>
 	<input type="hidden" name="price" value=<%=price%>>
-		<p><input type="submit" value="결제"></p>
+	<input type="hidden" name="kind" value="">
+		<p><input type="submit" value="확인"></p>
 	</form>
 </body>
 </html>
