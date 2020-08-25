@@ -50,10 +50,21 @@ public class paySerlvet extends HttpServlet {
 		if (kind == null) {
 			kind = "notUse";
 		}
+		String back = request.getParameter("back");
+		if (back == null) {
+			back = "notUse";
+		}
 		String remainingDays = (String)request.getAttribute("remainingDays");
 		String usedMinute = (String)request.getAttribute("usedMinute");
 		String coupon = request.getParameter("coupon");
 		String error = request.getParameter("error");
+		String dice = request.getParameter("dice");
+		if (dice == null) {
+			dice = "10";
+		}
+		String recard = request.getParameter("recard");
+		
+		
 		System.out.println();
 		System.out.println("paySerlvet");
 		System.out.println("car_num " + car_num);
@@ -65,10 +76,20 @@ public class paySerlvet extends HttpServlet {
 		System.out.println("usedMinute " + usedMinute);
 		System.out.println("coupon " + coupon);
 		System.out.println("error " + error);
+		System.out.println("dice " + dice);
+		System.out.println("recard " + recard);
 		
 		try {
 			gate_id.contentEquals("test"); // 비정상 접근 방지
-		if (price == null){
+		if (back.contentEquals("back")) {
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //
+			request.setAttribute("car_num", car_num);
+			request.setAttribute("gate_id", gate_id);
+			request.setAttribute("regular_non", regular_non);
+			request.setAttribute("price", price);
+			rq.forward(request,response);
+		}
+		else if (price == null){
 			if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
 				DTO.receiptDTO recDto = new DTO.receiptDTO();
 				recDto.setPay_price("0");
@@ -151,12 +172,14 @@ public class paySerlvet extends HttpServlet {
 				
 			}
 			else if (kind.contentEquals("card")){          //카드계산
+
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
 				request.setAttribute("price", price);
 				rq.forward(request,response);
+
 			}
 			else if(kind.contentEquals("cash")) {            //현금계산
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //
@@ -167,25 +190,40 @@ public class paySerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else {                                             //결제 완료된 요청들
-				DTO.receiptDTO recDto = new DTO.receiptDTO();
-				recDto.setPay_price(price);
-				recDto.setRegular_non(regular_non);
-				recDto.setGate_id(gate_id);
-				
-				DAO.receiptDAO dao = new DAO.receiptDAO();
-				dao.insert(recDto);
-				
-				if (regular_non.contentEquals("0")) {
-				RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
-				request.setAttribute("payed", "yes");
-				rq.forward(request,response);
+				int diceInt = Integer.parseInt(dice);
+				System.out.println("diceInt " + diceInt);
+				if(diceInt > 3){                                       //결제성공
+					DTO.receiptDTO recDto = new DTO.receiptDTO();
+					recDto.setPay_price(price);
+					recDto.setRegular_non(regular_non);
+					recDto.setGate_id(gate_id);
+					
+					DAO.receiptDAO dao = new DAO.receiptDAO();
+					dao.insert(recDto);
+					
+					if (regular_non.contentEquals("0")) {
+						RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
+						request.setAttribute("payed", "yes");
+						rq.forward(request,response);
+					}
+					else {
+						String rec_id = dao.checkReceipt(recDto);
+						RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  //정기핸들러에게 가입로그 전송
+						request.setAttribute("reg", "new");
+						request.setAttribute("car_num", car_num);
+						request.setAttribute("rec_id", rec_id);
+						rq.forward(request,response);
+					}
 				}
-				else {
-					String rec_id = dao.checkReceipt(recDto);
-					RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  //정기핸들러에게 가입로그 전송
-					request.setAttribute("reg", "new");
+				else {                                              //카드결제 에러
+					int recardInt = Integer.parseInt(recard);
+					recardInt++;
+					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
 					request.setAttribute("car_num", car_num);
-					request.setAttribute("rec_id", rec_id);
+					request.setAttribute("gate_id", gate_id);
+					request.setAttribute("regular_non", regular_non);
+					request.setAttribute("price", price);
+					request.setAttribute("recard", Integer.toString(recardInt));
 					rq.forward(request,response);
 				}
 			}

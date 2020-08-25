@@ -13,42 +13,52 @@ String admin = (String)request.getAttribute("admin");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자결제</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<div class="container3">
+
 <%if (!admin.contentEquals("yes")) {%>
-암호를 입력해 주세요.(숫자만)<br>
-
-	<form action="/WebTest/adminSerlvet" method="post">
-	<p><input type="password" name="password" required pattern="(\d{1,10})"></p>
+<div class="simpletext">
+암호를 입력해 주세요.(숫자만)
+</div>
+	<form class="form1" action="/WebTest/adminSerlvet" method="post">
+	<input class="text" type="password" name="password" required pattern="(\d{1,10})">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>
 	<input type="hidden" name="price" value=<%=price%>>
-		<p><input type="submit" value="확인"></p>
-	</form>
+	<input type="hidden" name="page" value="force">
+		<input class="button" type="submit" value="확인">
+	</form><br>
 <%if (admin.contentEquals("no")) {%>
+<div class="simpletext red">
 암호가 틀렸습니다!
+</div>
 <%} %>
-	<form action="/WebTest/adminSerlvet" method="post">
+	<form class="form3" action="/WebTest/adminSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>
 	<input type="hidden" name="price" value=<%=price%>>
+	<input type="hidden" name="page" value="force">
 	<input type="hidden" name="back" value="back">
-		<p><input type="submit" value="돌아가기"></p>
+		<input class="button" type="submit" value="돌아가기">
 	</form>
-
 <%} %>
 <%if (admin.contentEquals("yes")) {%>
-가격을 입력해주세요.<br>
-	<form action="/WebTest/paySerlvet" method="post">
-	<p><input type="text" name="price" required pattern="(\d{1,5})([0]{3})|([0])"></p>
+<div class="simpletext">
+가격을 입력해주세요.
+</div>
+	<form class="form1" action="/WebTest/paySerlvet" method="post">
+	<input class="text" type="text" name="price" required pattern="(\d{1,5})([0]{3})|([0])">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
 	<input type="hidden" name="regular_non" value=<%=regular_non%>>
-		<p><input type="submit" value="결제"></p>
+		<input class="button" type="submit" value="결제">
 	</form>
 <%} %>
+</div>
 </body>
 </html>

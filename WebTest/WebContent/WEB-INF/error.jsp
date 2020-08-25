@@ -19,10 +19,16 @@ else if (in_out.contentEquals("0")){
 <html>
 <head>
 <meta charset="UTF-8" http-equiv="refresh" content="5; url=/WebTest/gate.jsp" />
-<title>Insert title here</title>
+<title>에러발생</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<%=text%><br>
-<a href="/WebTest/gate.jsp">돌아가기</a>
+<div class="container4">
+<div class="simpletext red fontsizebig">
+<%=text%>
+</div>
+<div class="simpletext">
+<a href="/WebTest/gate.jsp">돌아가기</a></div>
+</div>
 </body>
 </html>

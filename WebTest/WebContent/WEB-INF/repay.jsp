@@ -11,15 +11,20 @@ String gate_id = (String)request.getAttribute("gate_id");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>다시결제</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<div class="container3">
+<div class="simpletext">
 계산을 안하셨군요?<br>
-계산하러 갑시다<br>
-	<form action="/WebTest/regularSerlvet" method="post">
+계산하러 갑시다.
+</div>
+	<form class="form3" action="/WebTest/regularSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
-		<p><input type="submit" value="확인"></p>
+		<input class="button" type="submit" value="확인">
 	</form>
+</div>
 </body>
 </html>

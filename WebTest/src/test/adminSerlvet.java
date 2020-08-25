@@ -42,9 +42,7 @@ public class adminSerlvet extends HttpServlet {
 			back = "notUse";
 		}
 		String page = request.getParameter("page");
-		if (page == null) {
-			page = "notUse";
-		}
+
 		
 		System.out.println();
 		System.out.println("adminSerlvet");
@@ -57,56 +55,56 @@ public class adminSerlvet extends HttpServlet {
 		System.out.println("page " + page);
 		
 		try {
-		//gate_id.contentEquals("test"); // 비정상 접근 방지
-		
-		if (password == null && back.contentEquals("notUse")) {
-		RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
-		request.setAttribute("car_num", car_num);
-		request.setAttribute("gate_id", gate_id);
-		request.setAttribute("regular_non", regular_non);
-		request.setAttribute("price", price);
-		request.setAttribute("admin", "0");
-		rq.forward(request,response);
-		}
-		else if (back.contentEquals("back")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", regular_non);
-			request.setAttribute("price", price);
-			rq.forward(request,response);
-		}
-		else if (page.contentEquals("notUse") && password.contentEquals("0000")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", regular_non);
-			request.setAttribute("admin", "yes");
-			rq.forward(request,response);
-		}
-		else if (page.contentEquals("notUse") && !password.contentEquals("0000")){
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("regular_non", regular_non);
-			request.setAttribute("price", price);
-			request.setAttribute("admin", "no");
-			rq.forward(request,response);
-		}
-		else if (page.contentEquals("admin")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
-			rq.forward(request,response);
-		}
-		else if (page.contentEquals("check") && password.contentEquals("0000")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp"); 
-			rq.forward(request,response);
-		}
-		else if (page.contentEquals("check")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
-			request.setAttribute("error", "1");
-			rq.forward(request,response);
-		}
-		
+		page.contentEquals("test"); // 비정상 접근 방지
+			
+			if (password == null && back.contentEquals("notUse")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("price", price);
+				request.setAttribute("admin", "0");
+				rq.forward(request,response);
+			}
+			else if (back.contentEquals("back")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("price", price);
+				rq.forward(request,response);
+			}
+			else if (page.contentEquals("force") && password.contentEquals("0000")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("admin", "yes");
+				rq.forward(request,response);
+			}
+			else if (page.contentEquals("force") && !password.contentEquals("0000")){
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("regular_non", regular_non);
+				request.setAttribute("price", price);
+				request.setAttribute("admin", "no");
+				rq.forward(request,response);
+			}
+			else if (page.contentEquals("admin")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
+				rq.forward(request,response);
+			}
+			else if (page.contentEquals("check") && password.contentEquals("0000")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp"); 
+				rq.forward(request,response);
+			}
+			else if (page.contentEquals("check")) {
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
+				request.setAttribute("error", "1");
+				rq.forward(request,response);
+			}
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();

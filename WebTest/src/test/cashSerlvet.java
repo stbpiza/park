@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/cashSerlvet")
 public class cashSerlvet extends HttpServlet {
@@ -20,6 +21,11 @@ public class cashSerlvet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		
+		HttpSession ss = request.getSession();
+		String changeBox = (String)ss.getAttribute("changeBox");
+		if (changeBox==null) {
+			changeBox="100000";
+		}
 		String car_num = request.getParameter("car_num");
 		String gate_id = request.getParameter("gate_id");
 		String regular_non = request.getParameter("regular_non");
@@ -37,6 +43,7 @@ public class cashSerlvet extends HttpServlet {
 		System.out.println("cash " + cash);
 		System.out.println("addCash " + addCash);
 		System.out.println("paid " + paid);
+		System.out.println("changeBox " + changeBox);
 
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
@@ -75,6 +82,9 @@ public class cashSerlvet extends HttpServlet {
 			}
 			else {
 				int changes = cashInt - priceInt;
+				int changeBoxInt = Integer.parseInt(changeBox);
+				changeBoxInt = changeBoxInt - changes;
+				ss.setAttribute("changeBox", Integer.toString(changeBoxInt));
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/changes.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);

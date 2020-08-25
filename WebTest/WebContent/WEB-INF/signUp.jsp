@@ -10,23 +10,28 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>정기가입권유</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<div class="container3">
+<div class="simpletext">
 정기 회원이 아니시군요?<br>
-가입 하시겠습니까?<br>
-	<form action="/WebTest/regularSerlvet" method="post">
+가입 하시겠습니까?
+</div>
+	<form class="form3" action="/WebTest/regularSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
-		<p><input type="submit" name="reg" value="yes"></p>
-	</form>
-		<form action="/WebTest/handlerSerlvet" method="post">
+		<input class="button" type="submit" name="reg" value="yes">
+	</form><Br>
+		<form class="form3" action="/WebTest/handlerSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
-	   <p><input type="submit" name="payed" value="no"></p>
+	   <input class="button" type="submit" name="payed" value="no">
 	</form>
-
+<div class="simpletext">
 <a href="/WebTest/gate.jsp">돌아가기</a>
-
+</div>
+</div>
 </body>
 </html>

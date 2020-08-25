@@ -48,8 +48,9 @@ public class sessionSerlvet extends HttpServlet {
 				if (id.contentEquals("admin") && password.contentEquals("0000")) {
 					HttpSession session = request.getSession(true);
 					session.setMaxInactiveInterval(86400);
-					session.setAttribute("setPricePerHour","2000");
+					session.setAttribute("setPricePerHour","1000");
 					session.setAttribute("setReg_price","50000");
+					session.setAttribute("changeBox", "100000");
 					
 					
 					RequestDispatcher rq = request.getRequestDispatcher("/gate.jsp");  //
@@ -61,6 +62,22 @@ public class sessionSerlvet extends HttpServlet {
 					request.setAttribute("idCheck", "no");
 					rq.forward(request,response);
 				}
+			}
+			else if (type.contentEquals("change")) {
+				HttpSession ss = request.getSession();
+				String changeBox = (String)ss.getAttribute("changeBox");
+				if (changeBox==null) {
+					changeBox="0";
+				}
+				int changeBoxInt = Integer.parseInt(changeBox);
+				changeBoxInt = changeBoxInt + 100000;
+				if (changeBoxInt>300000) {
+					changeBoxInt = 300000;
+				}
+				ss.setAttribute("changeBox", Integer.toString(changeBoxInt));
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //
+				request.setAttribute("set", "yes");
+				rq.forward(request,response);
 			}
 			else if (setPricePerHour != null) {
 				HttpSession session = request.getSession();
@@ -80,7 +97,7 @@ public class sessionSerlvet extends HttpServlet {
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp"); 
+			RequestDispatcher rq = request.getRequestDispatcher("/start.jsp"); 
 			rq.forward(request,response);
 		}
 	}
