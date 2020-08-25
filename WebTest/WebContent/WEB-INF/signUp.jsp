@@ -19,14 +19,16 @@
 정기 회원이 아니시군요?<br>
 가입 하시겠습니까?
 </div>
-	<form class="form3" action="/WebTest/regularSerlvet" method="post">
+	<form class="form3" action="/WebTest/handlerSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
+	<input type="hidden" name="payed" value="no">
 		<input class="button" type="submit" name="reg" value="yes">
 	</form><Br>
 		<form class="form3" action="/WebTest/handlerSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>
 	<input type="hidden" name="gate_id" value=<%=gate_id%>>
+	<input type="hidden" name="reg" value="no">
 	   <input class="button" type="submit" name="payed" value="no">
 	</form>
 <div class="simpletext">

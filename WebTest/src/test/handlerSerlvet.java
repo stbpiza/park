@@ -38,6 +38,13 @@ public class handlerSerlvet extends HttpServlet {
 		if (payed == null) {
 		 payed = (String)request.getAttribute("payed");
 		}
+		String reg = request.getParameter("reg");
+		if (reg == null) {
+			 reg = (String)request.getAttribute("reg");
+			}
+		if (reg == null) {
+			 reg = "notUse";
+		}
 		
 		System.out.println();                                      //테스트출력영역
 		System.out.println("handlerSerlvet");
@@ -45,6 +52,7 @@ public class handlerSerlvet extends HttpServlet {
 		System.out.println("car " + car);
 		System.out.println("gate_id " + gate_id);
 		System.out.println("payed " + payed);
+		System.out.println("reg " + reg);
 		System.out.println("remainingDays " + remainingDays);
 		System.out.println("usedMinute " + usedMinute);
 		
@@ -140,7 +148,7 @@ public class handlerSerlvet extends HttpServlet {
 				
 				else {                                             //계산하고 나갔는데 또 출차?
 				in_out = "0";
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  //입차 안된차
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  
 				request.setAttribute("in_out", in_out);
 				rq.forward(request,response);	
 				}
@@ -150,9 +158,10 @@ public class handlerSerlvet extends HttpServlet {
 			RequestDispatcher rq = request.getRequestDispatcher("/gateSerlvet");  //이용시간계산
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
+			request.setAttribute("reg", reg);
 			rq.forward(request,response);
 		}
-		else if (payed.contentEquals("no")) {
+		else if (payed.contentEquals("no") && reg.contentEquals("no")) {
 			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //일반결제
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
@@ -160,12 +169,26 @@ public class handlerSerlvet extends HttpServlet {
 			request.setAttribute("regular_non", "0");
 			rq.forward(request,response);
 		}
+		else if (payed.contentEquals("no") && reg.contentEquals("yes")) {
+			int usedMinuteInt = Integer.parseInt(usedMinute);
+			if (usedMinuteInt >= 1440) { //24시간 초과 이용자는 정기가입 안됨
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  
+				request.setAttribute("in_out", "2");
+				rq.forward(request,response);
+			}
+			else { //무사정기가입
+				RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("reg", "yes");
+				rq.forward(request,response);
+			}
+		}
 		else if (payed.contentEquals("yes")) {
 			
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/bye.jsp");  //문열어주기
 			request.setAttribute("remainingDays", remainingDays);
 			rq.forward(request,response);
-			//response.sendRedirect("/WebTest/bye.jsp");
 		}
 		}
 		catch(Exception e){

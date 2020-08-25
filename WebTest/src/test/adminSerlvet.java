@@ -57,7 +57,7 @@ public class adminSerlvet extends HttpServlet {
 		try {
 		page.contentEquals("test"); // 비정상 접근 방지
 			
-			if (password == null && back.contentEquals("notUse")) {
+			if (password == null && back.contentEquals("notUse")) {             //관리자결제로 이동(암호입력창)
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -66,16 +66,16 @@ public class adminSerlvet extends HttpServlet {
 				request.setAttribute("admin", "0");
 				rq.forward(request,response);
 			}
-			else if (back.contentEquals("back")) {
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //
+			else if (back.contentEquals("back")) {              //뒤로가기
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
 				request.setAttribute("price", price);
 				rq.forward(request,response);
 			}
-			else if (page.contentEquals("force") && password.contentEquals("0000")) {
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
+			else if (page.contentEquals("force") && password.contentEquals("0000")) {          //암호맞음
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
@@ -83,7 +83,7 @@ public class adminSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("force") && !password.contentEquals("0000")){
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //암호틀림
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
@@ -91,15 +91,15 @@ public class adminSerlvet extends HttpServlet {
 				request.setAttribute("admin", "no");
 				rq.forward(request,response);
 			}
-			else if (page.contentEquals("admin")) {
+			else if (page.contentEquals("admin")) {                                    //관리자페이지 암호
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
 				rq.forward(request,response);
 			}
-			else if (page.contentEquals("check") && password.contentEquals("0000")) {
+			else if (page.contentEquals("check") && password.contentEquals("0000")) {      //암호맞음
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp"); 
 				rq.forward(request,response);
 			}
-			else if (page.contentEquals("check")) {
+			else if (page.contentEquals("check")) {                                        //암호틀림
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
 				request.setAttribute("error", "1");
 				rq.forward(request,response);

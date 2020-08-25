@@ -18,7 +18,6 @@ if (idCheck==null){
 </head>
 <body>
 <div class="container2">
-<%if (changeBox ==null) {%>
 <div class="simpletext red fontsizebig">
 주차장 시스템을 시작합니다.<br>
 로그인이 필요합니다.<br>
@@ -33,12 +32,12 @@ if (idCheck==null){
 <%if (idCheck.contentEquals("no")){ %>
 <div class="simpletext red">잘못 입력하셨습니다.</div>
 <%} %>
-<%} %>
+
 <%if (changeBox !=null) {%>
 <div class="simpletext">
-이미 로그인 하셨군요? 여기로 들어가세요
+이미 로그인 하셨군요? 아래로 들어가세요
 </div>
-<div class="simpletext">
+<div class="simpletext fontsizebig">
 <a href="/WebTest/gate.jsp">들어가기</a></div>
 </div>
 <% }%>

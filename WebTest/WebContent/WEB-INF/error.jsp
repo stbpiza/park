@@ -13,7 +13,9 @@ else if (in_out.contentEquals("1")){
 else if (in_out.contentEquals("0")){
 	text="입차되지 않은 차량입니다!";
 }
-
+else if (in_out.contentEquals("2")){
+	text="24시간 이상 주차시 정기가입이 불가합니다!";
+}
 %>
 <!DOCTYPE html>
 <html>

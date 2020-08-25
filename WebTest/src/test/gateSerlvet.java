@@ -29,11 +29,16 @@ public class gateSerlvet extends HttpServlet {
 		
 		String car_num = (String)request.getAttribute("car_num");
 		String gate_id = (String)request.getAttribute("gate_id");
+		String reg = (String)request.getAttribute("reg");
+		if (reg == null) {
+			reg="no";
+		}
 		
 		System.out.println();                                      //테스트출력영역
 		System.out.println("gateSerlvet");
 		System.out.println("car_num " + car_num);
 		System.out.println("gate_id " + gate_id);
+		System.out.println("reg " + reg);
 		
 		try {
 	    gate_id.contentEquals("test"); // 비정상 접근 방지
@@ -61,6 +66,7 @@ public class gateSerlvet extends HttpServlet {
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("usedMinute", Integer.toString(usedMinute));
+			request.setAttribute("reg", reg);
 			rq.forward(request,response);
 		} 
 		

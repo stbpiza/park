@@ -82,7 +82,7 @@ public class paySerlvet extends HttpServlet {
 		try {
 			gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (back.contentEquals("back")) {
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //돌아가기로 온 요청처리
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("regular_non", regular_non);
@@ -146,7 +146,13 @@ public class paySerlvet extends HttpServlet {
 				String nowString = format.format(now);
 				int priceInt = Integer.parseInt(price);
 				if((coupon.substring(0,4)).contentEquals(nowString)) { //방문증 인식 성공
-					priceInt = priceInt - 2000;
+					HttpSession session = request.getSession();
+					String pricePerHourString = (String)session.getAttribute("setPricePerHour");
+					if (pricePerHourString == null) {
+						pricePerHourString = "1000";
+					}
+					int priceperHour = Integer.parseInt(pricePerHourString);
+					priceInt = priceInt - priceperHour*2;
 					if (priceInt < 0) {
 						priceInt = 0;
 					}
@@ -172,7 +178,6 @@ public class paySerlvet extends HttpServlet {
 				
 			}
 			else if (kind.contentEquals("card")){          //카드계산
-
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -202,13 +207,13 @@ public class paySerlvet extends HttpServlet {
 					dao.insert(recDto);
 					
 					if (regular_non.contentEquals("0")) {
-						RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //핸들러에게 결제완료 전송  
+						RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");  //일반결제는 핸들러에게 결제완료 전송  
 						request.setAttribute("payed", "yes");
 						rq.forward(request,response);
 					}
 					else {
 						String rec_id = dao.checkReceipt(recDto);
-						RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  //정기핸들러에게 가입로그 전송
+						RequestDispatcher rq = request.getRequestDispatcher("/regularSerlvet");  //정기가입은 정기에게 가입로그 전송
 						request.setAttribute("reg", "new");
 						request.setAttribute("car_num", car_num);
 						request.setAttribute("rec_id", rec_id);
