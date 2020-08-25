@@ -3,9 +3,9 @@ package DAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import DTO.gateDTO;
 
 public class receiptDAO {
 	private Connection getConnection() throws SQLException {
@@ -37,7 +37,7 @@ public class receiptDAO {
 
             pstmt.setString(1, recDto.getPay_price());
             pstmt.setString(2, recDto.getRegular_non());
-            pstmt.setString(3, recDto.getGate_id());
+            pstmt.setInt(3, Integer.parseInt(recDto.getGate_id()));
             int count = pstmt.executeUpdate();
 
             result = (count == 1);
@@ -61,4 +61,31 @@ public class receiptDAO {
 
         return result;
     }
+    
+	public String checkReceipt(DTO.receiptDTO recDto) {
+		String rec_id = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "SELECT rec_id FROM receipt WHERE gate_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, recDto.getGate_id());
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				recDto.setRec_id(rs.getString(1));
+				rec_id = recDto.getRec_id();
+			}
+
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+		}
+		return rec_id;
+	}
+	
 }

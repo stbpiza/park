@@ -1,4 +1,4 @@
-package DAO;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +23,7 @@ public class gateIdDAO {
         return conn;
     }
 	
-	public String getId(String car_num) {
+	public String getId(DTO.gateDTO gateDto) {
 		String gate_id = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -32,14 +32,14 @@ public class gateIdDAO {
 		try {
 			conn = getConnection();
 			
-			String sql = "SELECT time FROM gate WHERE car_num = ? AND in_out = 0 ORDER BY time DESC LIMIT 1";
+			String sql = "SELECT gate_id FROM gate WHERE car_num = ? AND in_out = 0 ORDER BY time DESC LIMIT 1";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, car_num);
+			pstmt.setString(1, gateDto.getCar_num());
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				DTO.gateDTO gateDto = new DTO.gateDTO();
+				//DTO.gateDTO gateDto = new DTO.gateDTO();
 				gateDto.setGate_id(rs.getString(1));
 				
 				gate_id = gateDto.getGate_id();
