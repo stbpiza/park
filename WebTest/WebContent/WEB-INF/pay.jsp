@@ -39,7 +39,7 @@ regular_non = "0";
 <%if (!price.contentEquals("0")) {%>
 <% if (reg_price == null) {%>
 <div class="simpletext">
-방문증을 인식해 주세요.
+방문증을 인식해 주세요.(2시간 할인)
 </div>
 <% if (!error.contentEquals("0")) {%>
 <div class="simpletext red">

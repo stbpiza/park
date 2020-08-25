@@ -37,9 +37,11 @@ public class RegularSerlvet extends HttpServlet {
 		String rec_id = (String)request.getAttribute("rec_id");
 		
 		System.out.println();
+		System.out.println("regularSerlvet");
 		System.out.println("car_num " + car_num);
 		System.out.println("gate_id " + gate_id);
 		System.out.println("reg " + reg);
+		System.out.println("rec_id " + rec_id);
 		
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
@@ -58,7 +60,7 @@ public class RegularSerlvet extends HttpServlet {
 	       Date now = new Date();
 	       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	
-	       try {
+	       try { //시간계산 트라이캐치
 			Date timeDate = format.parse(time);                      
 			long remainingTime = timeDate.getTime() - now.getTime();
 			System.out.println("remainingTime " + remainingTime);
@@ -72,17 +74,15 @@ public class RegularSerlvet extends HttpServlet {
 					rq.forward(request,response);
 		       }
 		       else {
-		    	   
-		    	   
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
 					request.setAttribute("gate_id", gate_id);
 					request.setAttribute("car_num", car_num);
 					rq.forward(request,response);
 		       }
-		} 
+	       } 
 	       catch (ParseException e) {
 			e.printStackTrace();
-		}
+	       }
 		}
 			else {                                                                          //정기로그에 없는경우
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  
@@ -92,9 +92,6 @@ public class RegularSerlvet extends HttpServlet {
 			}
 	}
 		else if (reg.contentEquals("yes")) {                                           //정기 신규등록 파트
-			
-			
-			
 			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
@@ -102,7 +99,7 @@ public class RegularSerlvet extends HttpServlet {
 			rq.forward(request,response);
 		}
 		
-		else {
+		else {                                                     //계산 완료한 신규가입자 로그등록
 			DTO.regularDTO regDto = new DTO.regularDTO();
 			regDto.setCar_num(car_num);
 			regDto.setRec_id(rec_id);

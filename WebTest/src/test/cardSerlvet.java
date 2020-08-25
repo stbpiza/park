@@ -25,9 +25,14 @@ public class cardSerlvet extends HttpServlet {
 		String gate_id = request.getParameter("gate_id");
 		String regular_non = request.getParameter("regular_non");
 		String price = request.getParameter("price");
+		
+		System.out.println();
+		System.out.println("cardSerlvet");
+		
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
-		RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //
+		
+		RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //결제완료
 		request.setAttribute("car_num", car_num);
 		request.setAttribute("gate_id", gate_id);
 		request.setAttribute("regular_non", regular_non);

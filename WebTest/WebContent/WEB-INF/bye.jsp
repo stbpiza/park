@@ -11,20 +11,20 @@ if (remainingDays!=null){
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" http-equiv="refresh" content="5; url=/WebTest/gate.jsp" />
+<meta charset="UTF-8" http-equiv="refresh" content="3; url=/WebTest/gate.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <title>출차완료</title>
 </head>
 <body>
 <div class="container3">
-<div class="simpletext">
+<div class="simpletext fontsizebig">
 문이 열렸습니다.<br>
 안녕히가세요.<br>
 <%=text %>
 </div>
-<div class="simpletext">
+<!-- <div class="simpletext">
 <a href="/WebTest/gate.jsp">돌아가기</a>
-</div>
+</div> -->
 </div>
 </body>
 </html>

@@ -72,7 +72,7 @@ if (priceInt < cashInt){
 		<input class="button" type="submit" name="addCash" value="1000">
 	</form>
 	<%} %>
-	<%if(nextChangeBox>=0) {%>
+	<%if(nextChangeBox>=0 && priceInt <= cashInt) {%>
 	<br>
 	<form class="form3" action="/WebTest/cashSerlvet" method="post">
 	<input type="hidden" name="car_num" value=<%=car_num%>>

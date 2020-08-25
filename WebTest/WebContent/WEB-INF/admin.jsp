@@ -15,8 +15,8 @@ String changeBox = (String)ss.getAttribute("changeBox");
 <header>
 <div class="simpletext center">
 관리자 페이지 입니다<br>
-시간당 금액 : <%=setPricePerHour %><br>
-정기 금액 : <%=setReg_price %>
+시간당 금액 : <%=setPricePerHour %>
+정기 금액 : <%=setReg_price %><Br>
 남은 잔돈 : <%=changeBox %>
 </div>
 </header>

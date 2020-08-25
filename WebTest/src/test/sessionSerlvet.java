@@ -51,14 +51,11 @@ public class sessionSerlvet extends HttpServlet {
 					session.setAttribute("setPricePerHour","1000");
 					session.setAttribute("setReg_price","50000");
 					session.setAttribute("changeBox", "100000");
-					
-					
-					RequestDispatcher rq = request.getRequestDispatcher("/gate.jsp");  //
-					//request.setAttribute(, );
+					RequestDispatcher rq = request.getRequestDispatcher("/gate.jsp");  //로그인 성공
 					rq.forward(request,response);
 				}
 				else if (!id.contentEquals("admin") || !password.contentEquals("0000")) {
-					RequestDispatcher rq = request.getRequestDispatcher("/start.jsp");  //
+					RequestDispatcher rq = request.getRequestDispatcher("/start.jsp");  //로그인 실패
 					request.setAttribute("idCheck", "no");
 					rq.forward(request,response);
 				}
@@ -66,30 +63,30 @@ public class sessionSerlvet extends HttpServlet {
 			else if (type.contentEquals("change")) {
 				HttpSession ss = request.getSession();
 				String changeBox = (String)ss.getAttribute("changeBox");
-				if (changeBox==null) {
+				if (changeBox==null) {                                       //null에러 방지
 					changeBox="0";
 				}
-				int changeBoxInt = Integer.parseInt(changeBox);
+				int changeBoxInt = Integer.parseInt(changeBox);             //잔돈추가
 				changeBoxInt = changeBoxInt + 100000;
 				if (changeBoxInt>300000) {
 					changeBoxInt = 300000;
 				}
 				ss.setAttribute("changeBox", Integer.toString(changeBoxInt));
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  
 				request.setAttribute("set", "yes");
 				rq.forward(request,response);
 			}
 			else if (setPricePerHour != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("setPricePerHour",setPricePerHour);
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //시간당 금액 수정
 				request.setAttribute("set", "yes");
 				rq.forward(request,response);
 			}
 			else if (setReg_price != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("setReg_price",setReg_price);
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //정기 금액 수정
 				request.setAttribute("set", "yes");
 				rq.forward(request,response);
 			}
@@ -97,7 +94,7 @@ public class sessionSerlvet extends HttpServlet {
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			RequestDispatcher rq = request.getRequestDispatcher("/start.jsp"); 
+			RequestDispatcher rq = request.getRequestDispatcher("/start.jsp"); //주소로 들어오면 초기화면으로 보냄
 			rq.forward(request,response);
 		}
 	}

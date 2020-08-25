@@ -61,7 +61,7 @@ public class cashSerlvet extends HttpServlet {
 			int addCashInt = Integer.parseInt(addCash);
 			cashInt = cashInt + addCashInt;
 			
-			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //현금넣기
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("regular_non", regular_non);
@@ -73,7 +73,7 @@ public class cashSerlvet extends HttpServlet {
 			int cashInt = Integer.parseInt(cash);
 			int priceInt = Integer.parseInt(price);
 			if (cashInt==priceInt) {
-				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //딱 맞게 낸 경우
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
@@ -85,7 +85,7 @@ public class cashSerlvet extends HttpServlet {
 				int changeBoxInt = Integer.parseInt(changeBox);
 				changeBoxInt = changeBoxInt - changes;
 				ss.setAttribute("changeBox", Integer.toString(changeBoxInt));
-				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/changes.jsp");  //
+				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/changes.jsp");  //잔돈 돌려주는경우
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("regular_non", regular_non);
