@@ -48,6 +48,7 @@ public class cashSerlvet extends HttpServlet {
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (cash == null) {
+			System.out.println("현금결제선택");
 			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
@@ -57,6 +58,7 @@ public class cashSerlvet extends HttpServlet {
 			rq.forward(request,response);
 		}
 		else if (paid == null){
+			System.out.println(addCash + "현금투입");
 			int cashInt = Integer.parseInt(cash);
 			int addCashInt = Integer.parseInt(addCash);
 			cashInt = cashInt + addCashInt;
@@ -73,6 +75,7 @@ public class cashSerlvet extends HttpServlet {
 			int cashInt = Integer.parseInt(cash);
 			int priceInt = Integer.parseInt(price);
 			if (cashInt==priceInt) {
+				System.out.println("거스름돈없음");
 				RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //딱 맞게 낸 경우
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -81,6 +84,7 @@ public class cashSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else {
+				System.out.println("잔돈제공필요");
 				int changes = cashInt - priceInt;
 				int changeBoxInt = Integer.parseInt(changeBox);
 				changeBoxInt = changeBoxInt - changes;

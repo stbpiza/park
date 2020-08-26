@@ -1,28 +1,13 @@
 package DAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
 public class receiptDAO {
-	private Connection getConnection() throws SQLException {
-        Connection conn = null;
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-
-            String url = "jdbc:mysql://localhost:3306/park_test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            conn = DriverManager.getConnection(url, "root", "");
-        }
-        catch (ClassNotFoundException e) {
-            System.out.println(" 드라이버 로딩 실패 ");
-        }
-
-        return conn;
-    }
+	DAO.dbHandler dbH = new DAO.dbHandler();
 	
     public boolean insert(DTO.receiptDTO recDto ) {
         boolean result = false;
@@ -30,7 +15,7 @@ public class receiptDAO {
         PreparedStatement pstmt = null;
 
         try {
-            conn = getConnection();
+            conn = dbH.getConnection();
 
             String sql = "INSERT INTO receipt (pay_time, pay_price, regular_non, gate_id) VALUES (now(), ?, ?, ?);";
             pstmt = conn.prepareStatement(sql);
@@ -69,7 +54,7 @@ public class receiptDAO {
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dbH.getConnection();
 			
 			String sql = "SELECT rec_id FROM receipt WHERE gate_id = ?";
 			pstmt = conn.prepareStatement(sql);

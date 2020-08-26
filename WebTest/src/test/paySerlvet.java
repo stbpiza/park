@@ -82,6 +82,7 @@ public class paySerlvet extends HttpServlet {
 		try {
 			gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (back.contentEquals("back")) {
+			System.out.println("돌아가기로 계산페이지로");
 			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");  //돌아가기로 온 요청처리
 			request.setAttribute("car_num", car_num);
 			request.setAttribute("gate_id", gate_id);
@@ -91,6 +92,7 @@ public class paySerlvet extends HttpServlet {
 		}
 		else if (price == null){
 			if (regular_non.contentEquals("1")) {                              //기존 정기 회원 영수증
+				System.out.println("정기회원 0원 영수증");
 				DTO.receiptDTO recDto = new DTO.receiptDTO();
 				recDto.setPay_price("0");
 				recDto.setRegular_non("1");
@@ -105,6 +107,7 @@ public class paySerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (regular_non.contentEquals("new")) {                                    //정기 신규 등록하는사람
+				System.out.println("신규 정기 가입");
 				HttpSession session = request.getSession();
 				String reg_price = (String)session.getAttribute("setReg_price");
 				System.out.println("reg_price " + reg_price);
@@ -120,7 +123,7 @@ public class paySerlvet extends HttpServlet {
 			}
 			
 			else if (regular_non.contentEquals("0")) {              //일반 결제 할사람
-				
+				System.out.println("일반결제진행");
 				HttpSession session = request.getSession();
 				String pricePerHourString = (String)session.getAttribute("setPricePerHour");
 				System.out.println("pricePerHour " + pricePerHourString);
@@ -141,11 +144,13 @@ public class paySerlvet extends HttpServlet {
 	}
 		else {
 			if (kind.contentEquals("coupon")) {                     //방문증 할인 계산
+				System.out.println("방문증할인시도");
 				Date now = new Date();
 				SimpleDateFormat format = new SimpleDateFormat("MMdd");
 				String nowString = format.format(now);
 				int priceInt = Integer.parseInt(price);
 				if((coupon.substring(0,4)).contentEquals(nowString)) { //방문증 인식 성공
+					System.out.println("인식성공");
 					HttpSession session = request.getSession();
 					String pricePerHourString = (String)session.getAttribute("setPricePerHour");
 					if (pricePerHourString == null) {
@@ -165,6 +170,7 @@ public class paySerlvet extends HttpServlet {
 		
 				}
 				else {                                           //방문증 인식 오류
+					System.out.println("방문증인식실패");
 					int errorInt = Integer.parseInt(error);
 					errorInt++;
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
@@ -178,6 +184,7 @@ public class paySerlvet extends HttpServlet {
 				
 			}
 			else if (kind.contentEquals("card")){          //카드계산
+				System.out.println("카드계산선택");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -187,6 +194,7 @@ public class paySerlvet extends HttpServlet {
 
 			}
 			else if(kind.contentEquals("cash")) {            //현금계산
+				System.out.println("현금계산선택");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/cash.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -198,6 +206,7 @@ public class paySerlvet extends HttpServlet {
 				int diceInt = Integer.parseInt(dice);
 				System.out.println("diceInt " + diceInt);
 				if(diceInt > 3){                                       //결제성공
+					System.out.println("결제성공");
 					DTO.receiptDTO recDto = new DTO.receiptDTO();
 					recDto.setPay_price(price);
 					recDto.setRegular_non(regular_non);
@@ -221,6 +230,7 @@ public class paySerlvet extends HttpServlet {
 					}
 				}
 				else {                                              //카드결제 에러
+					System.out.println("카드결제에러");
 					int recardInt = Integer.parseInt(recard);
 					recardInt++;
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/card.jsp");  //

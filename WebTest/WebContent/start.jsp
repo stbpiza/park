@@ -18,7 +18,7 @@ if (idCheck==null){
 </head>
 <body>
 <div class="container2">
-<div class="simpletext red fontsizebig">
+<div class="simpletext red fontsizebig center">
 주차장 시스템을 시작합니다.<br>
 로그인이 필요합니다.<br>
 (id:admin pw:0000)<br>
