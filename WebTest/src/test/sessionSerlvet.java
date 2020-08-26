@@ -46,6 +46,7 @@ public class sessionSerlvet extends HttpServlet {
 			errorCheck.contentEquals("test"); //주소로 들어오는거 방지
 			if (type == null) {
 				if (id.contentEquals("admin") && password.contentEquals("0000")) {
+					System.out.println("로그인성공");
 					HttpSession session = request.getSession(true);
 					session.setMaxInactiveInterval(86400);
 					session.setAttribute("setPricePerHour","1000");
@@ -55,12 +56,14 @@ public class sessionSerlvet extends HttpServlet {
 					rq.forward(request,response);
 				}
 				else if (!id.contentEquals("admin") || !password.contentEquals("0000")) {
+					System.out.println("로그인실패");
 					RequestDispatcher rq = request.getRequestDispatcher("/start.jsp");  //로그인 실패
 					request.setAttribute("idCheck", "no");
 					rq.forward(request,response);
 				}
 			}
 			else if (type.contentEquals("change")) {
+				System.out.println("잔돈추가");
 				HttpSession ss = request.getSession();
 				String changeBox = (String)ss.getAttribute("changeBox");
 				if (changeBox==null) {                                       //null에러 방지
@@ -77,6 +80,7 @@ public class sessionSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (setPricePerHour != null) {
+				System.out.println("시간당 금액 수정" + setPricePerHour);
 				HttpSession session = request.getSession();
 				session.setAttribute("setPricePerHour",setPricePerHour);
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //시간당 금액 수정
@@ -84,6 +88,7 @@ public class sessionSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (setReg_price != null) {
+				System.out.println("정기 금액 수정" + setReg_price);
 				HttpSession session = request.getSession();
 				session.setAttribute("setReg_price",setReg_price);
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp");  //정기 금액 수정

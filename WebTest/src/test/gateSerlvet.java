@@ -54,25 +54,35 @@ public class gateSerlvet extends HttpServlet {
 		System.out.println("inTime " + inTime);
 		System.out.println("outTime " + outTime);
 		
+		
+		if (inTime == null) {
+			System.out.println("입차로그없이 출차로그만 있는경우");
+			String in_out = "0";
+			RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/error.jsp");  
+			request.setAttribute("in_out", in_out);
+			rq.forward(request,response);	
+		}
+		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		
-		try {                                                                    //date형식에 스트링넣기
-			Date inTimeDate = format.parse(inTime);
-			Date outTimeDate = format.parse(outTime);
-			long usedTime = outTimeDate.getTime() - inTimeDate.getTime();
-			int usedMinute = (int)Math.ceil((double)usedTime/(1000*60));
+			try {                                           //date형식에 스트링넣기
+				System.out.println("이용시간계산");
+				Date inTimeDate = format.parse(inTime);
+				Date outTimeDate = format.parse(outTime);
+				long usedTime = outTimeDate.getTime() - inTimeDate.getTime();
+				int usedMinute = (int)Math.ceil((double)usedTime/(1000*60));
+				
+				RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");
+				request.setAttribute("car_num", car_num);
+				request.setAttribute("gate_id", gate_id);
+				request.setAttribute("usedMinute", Integer.toString(usedMinute));
+				request.setAttribute("reg", reg);
+				rq.forward(request,response);
+			} 
 			
-			RequestDispatcher rq = request.getRequestDispatcher("/handlerSerlvet");
-			request.setAttribute("car_num", car_num);
-			request.setAttribute("gate_id", gate_id);
-			request.setAttribute("usedMinute", Integer.toString(usedMinute));
-			request.setAttribute("reg", reg);
-			rq.forward(request,response);
-		} 
-		
-		catch (ParseException e) {
-			e.printStackTrace();
-		}
+			catch (ParseException e) {
+				e.printStackTrace();
+			}
 		
 		}
 		catch(Exception e){

@@ -46,6 +46,7 @@ public class RegularSerlvet extends HttpServlet {
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
 		if (reg == null) { // 정기유무 확인파트
+			System.out.println("정기회원인지 확인");
 			String time ;
 			
 			DTO.regularDTO regDto = new DTO.regularDTO();
@@ -67,6 +68,7 @@ public class RegularSerlvet extends HttpServlet {
 			int remainingDays = (int)(remainingTime/(1000*60*60*24));
 			System.out.println("remainingDays " + remainingDays);
 		       if (remainingDays > 0) {
+		    	   System.out.println("정기맞음");
 		    	   	RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //정기맞음
 					request.setAttribute("gate_id", gate_id);
 					request.setAttribute("regular_non", "1");
@@ -74,6 +76,7 @@ public class RegularSerlvet extends HttpServlet {
 					rq.forward(request,response);
 		       }
 		       else {
+		    	   System.out.println("날짜지남");
 					RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  //날짜지남
 					request.setAttribute("gate_id", gate_id);
 					request.setAttribute("car_num", car_num);
@@ -85,6 +88,7 @@ public class RegularSerlvet extends HttpServlet {
 	       }
 		}
 			else {                                                                          //정기로그에 없는경우
+				System.out.println("정기로그에없음");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/signUp.jsp");  
 				request.setAttribute("gate_id", gate_id);
 				request.setAttribute("car_num", car_num);
@@ -92,6 +96,7 @@ public class RegularSerlvet extends HttpServlet {
 			}
 	}
 		else if (reg.contentEquals("yes")) {                                           //정기 신규등록 파트
+			System.out.println("정기가입파트");
 			RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  
 			request.setAttribute("gate_id", gate_id);
 			request.setAttribute("car_num", car_num);
@@ -100,6 +105,7 @@ public class RegularSerlvet extends HttpServlet {
 		}
 		
 		else {                                                     //계산 완료한 신규가입자 로그등록
+			System.out.println("정기계산자 로그찍기");
 			DTO.regularDTO regDto = new DTO.regularDTO();
 			regDto.setCar_num(car_num);
 			regDto.setRec_id(rec_id);

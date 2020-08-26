@@ -58,6 +58,7 @@ public class adminSerlvet extends HttpServlet {
 		page.contentEquals("test"); // 비정상 접근 방지
 			
 			if (password == null && back.contentEquals("notUse")) {             //관리자결제로 이동(암호입력창)
+				System.out.println("관리자결제 암호입력창");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -67,6 +68,7 @@ public class adminSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (back.contentEquals("back")) {              //뒤로가기
+				System.out.println("뒤로가기(계산하러)");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/pay.jsp");
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -75,6 +77,7 @@ public class adminSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("force") && password.contentEquals("0000")) {          //암호맞음
+				System.out.println("관리자결제 암호일치");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -83,6 +86,7 @@ public class adminSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("force") && !password.contentEquals("0000")){
+				System.out.println("관리자결제 암호틀림");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/forcedPay.jsp");  //암호틀림
 				request.setAttribute("car_num", car_num);
 				request.setAttribute("gate_id", gate_id);
@@ -92,14 +96,17 @@ public class adminSerlvet extends HttpServlet {
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("admin")) {                                    //관리자페이지 암호
+				System.out.println("관리자페이지 암호입력페이지");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("check") && password.contentEquals("0000")) {      //암호맞음
+				System.out.println("관리자페이지 암호일치");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/admin.jsp"); 
 				rq.forward(request,response);
 			}
 			else if (page.contentEquals("check")) {                                        //암호틀림
+				System.out.println("관리자페이지 암호틀림");
 				RequestDispatcher rq = request.getRequestDispatcher("/WEB-INF/adminCheck.jsp"); 
 				request.setAttribute("error", "1");
 				rq.forward(request,response);

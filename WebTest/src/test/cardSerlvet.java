@@ -31,7 +31,7 @@ public class cardSerlvet extends HttpServlet {
 		
 		try {
 		gate_id.contentEquals("test"); // 비정상 접근 방지
-		
+		System.out.println("카드결제성공");
 		RequestDispatcher rq = request.getRequestDispatcher("/paySerlvet");  //결제완료
 		request.setAttribute("car_num", car_num);
 		request.setAttribute("gate_id", gate_id);
