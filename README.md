@@ -5,7 +5,7 @@ parking lot settlement system
 풀스택 구현   
 기초지식 없이 처음으로 만들어본 프로젝트   
 
-## use시
+## use
 - Java 11
 - Java Servlet
 - jsp(HTML + CSS)
